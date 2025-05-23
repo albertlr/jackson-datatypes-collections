@@ -16,4 +16,8 @@ module jackson.datatype.pcollections
     // Further, need to open up test packages for JUnit et al
     opens tools.jackson.datatype.pcollections;
     opens tools.jackson.datatype.pcollections.deser;
+
+    provides tools.jackson.databind.JacksonModule with
+        tools.jackson.datatype.pcollections.PCollectionsModule;
+    uses tools.jackson.databind.JacksonModule;
 }

@@ -17,4 +17,8 @@ module tools.jackson.datatype.hppc
     opens tools.jackson.datatype.hppc;
     opens tools.jackson.datatype.hppc.deser;
     opens tools.jackson.datatype.hppc.ser;
+
+    provides tools.jackson.databind.JacksonModule with
+        tools.jackson.datatype.hppc.HppcModule;
+    uses tools.jackson.databind.JacksonModule;
 }

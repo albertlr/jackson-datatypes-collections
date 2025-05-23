@@ -21,4 +21,8 @@ module tools.jackson.datatype.guava
     opens tools.jackson.datatype.guava.fuzz;
     opens tools.jackson.datatype.guava.optional;
     opens tools.jackson.datatype.guava.pojo;
+
+    provides tools.jackson.databind.JacksonModule with
+        tools.jackson.datatype.guava.GuavaModule;
+    uses tools.jackson.databind.JacksonModule; // for testing
 }

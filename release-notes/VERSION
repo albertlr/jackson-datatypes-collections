@@ -12,7 +12,7 @@ Modules:
 
 3.0.0-rc6 (not yet released)
 
-- Fix SPI metadata to use "tools.jackson" prefix instead of "com.fasterxml.jackson"
+- Remove SPI metadata; fix SPI module test to work with JPMS
 
 3.0.0-rc5 (22-May-2025)
 3.0.0-rc4 (10-May-2025)

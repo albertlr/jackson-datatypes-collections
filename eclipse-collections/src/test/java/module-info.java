@@ -20,4 +20,8 @@ module tools.jackson.datatype.eclipsecollections
     // Further, need to open up test packages for JUnit et al
     
     opens tools.jackson.datatype.eclipsecollections;
+
+    provides tools.jackson.databind.JacksonModule with
+        tools.jackson.datatype.eclipsecollections.EclipseCollectionsModule;
+    uses tools.jackson.databind.JacksonModule;
 }

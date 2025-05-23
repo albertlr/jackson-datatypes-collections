@@ -18,7 +18,6 @@ public class JDKSerializabilityTest extends ModuleTestBase
         ShortArrayList array = new ShortArrayList();
         array.add((short)-12, (short)0);
         assertEquals("[-12,0]", unfrozenMapper.writeValueAsString(array));
-
     }
 
     private ObjectMapper serializeAndDeserialize(ObjectMapper mapper) throws Exception {
