@@ -109,6 +109,8 @@ Joo Hyuk Kim (JooHyukKim@github)
  * Contributed fix for #117: (guava) `ImmutableRangeSet` fails to deserialize
    without explicit deserializer
   (2.16.0)
+ * Contributed fix for #185: `ACCEPT_SINGLE_VALUE_AS_ARRAY` doesn't work on Guava `ImmutableList`
+  (2.18.5)
 
 Ethan McCue (@bowbahdoe)
   * Reported #122: PCollections module info (`module-info.class`) incorrect
@@ -133,6 +135,10 @@ Arthur Chan (@arthurscchan)
   * Contributed #138: (guava) `GuavaCollectionDeserializer` still throws NPE in
     some circumstances
    (2.17.0)
+
+Gergely Juhasz (@JGergely)
+ * Reported #185: `ACCEPT_SINGLE_VALUE_AS_ARRAY` doesn't work on Guava `ImmutableList`
+  (2.18.5)
 
 Abhishek Kumar (@Abhishekkr3003)
   * Contributed #1: (guava) Add deserialization support for `Table<R, C, V>`

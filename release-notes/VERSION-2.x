@@ -20,12 +20,24 @@ Active Maintainers:
 
 -
 
+2.19.1 (not yet released)
+
+#185: `ACCEPT_SINGLE_VALUE_AS_ARRAY` doesn't work on Guava `ImmutableList`
+ (reported by Gergely J)
+ (fix contributed by Joo-Hyuk K)
+
 2.19.0 (24-Apr-2025)
 
 #1: (guava) Add deserialization support for `Table<R, C, V>`
  (contributed by Abhishek K)
 #174: Unify testing structure/tools [JSTEP-10]
  (contributed by Joo-Hyuk K)
+
+2.18.5 (not yet released)
+
+#185: `ACCEPT_SINGLE_VALUE_AS_ARRAY` doesn't work on Guava `ImmutableList`
+ (reported by Gergely J)
+ (fix contributed by Joo-Hyuk K)
 
 2.18.4 (06-May-2025)
 2.18.3 (28-Feb-2025)

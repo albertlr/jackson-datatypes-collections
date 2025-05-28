@@ -2,8 +2,9 @@ package com.fasterxml.jackson.datatype.guava;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
+
+import com.google.common.collect.ImmutableList;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
