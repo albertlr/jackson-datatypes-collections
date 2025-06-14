@@ -21,7 +21,7 @@ Active Maintainers:
 #190: Add unit tests to verify goodness of SPI metadata for Modules
 - Generate SBOMs [JSTEP-14]
 
-2.19.1 (not yet released)
+2.19.1 (13-Jun-2025)
 
 #185: `ACCEPT_SINGLE_VALUE_AS_ARRAY` doesn't work on Guava `ImmutableList`
  (reported by Gergely J)
