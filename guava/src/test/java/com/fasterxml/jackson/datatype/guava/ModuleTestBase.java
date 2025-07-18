@@ -36,14 +36,10 @@ public abstract class ModuleTestBase
     }
 
     protected String a2q(String json) {
-        return aposToQuotes(json);
-    }
-
-    protected String aposToQuotes(String json) {
         return json.replace("'", "\"");
     }
 
-    public String quote(String str) {
+    public String q(String str) {
         return '"'+str+'"';
     }
 

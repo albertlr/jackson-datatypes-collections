@@ -35,7 +35,7 @@ public class OptionalUnwrappedTest extends ModuleTestBase
     public void testUntypedWithOptionalsNotNulls() throws Exception
     {
         final ObjectMapper mapper = mapperWithModule(false);
-        String jsonExp = aposToQuotes("{'XX.name':'Bob'}");
+        String jsonExp = a2q("{'XX.name':'Bob'}");
         String jsonAct = mapper.writeValueAsString(new OptionalParent());
         assertEquals(jsonExp, jsonAct);
     }
@@ -46,7 +46,7 @@ public class OptionalUnwrappedTest extends ModuleTestBase
     public void testUntypedWithNullEqOptionals() throws Exception
     {
         final ObjectMapper mapper = mapperWithModule(true);
-        String jsonExp = aposToQuotes("{'XX.name':'Bob'}");
+        String jsonExp = a2q("{'XX.name':'Bob'}");
         String jsonAct = mapper.writeValueAsString(new OptionalParent());
         assertEquals(jsonExp, jsonAct);
     }

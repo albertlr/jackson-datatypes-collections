@@ -205,7 +205,7 @@ public class MultimapsTest extends ModuleTestBase
         Multimap<String,Integer> input = ArrayListMultimap.create();
         input.put("empty", null);
         String json = MAPPER.writeValueAsString(input);
-        assertEquals(aposToQuotes("{'empty':[null]}"), json);
+        assertEquals(a2q("{'empty':[null]}"), json);
     }
 
     // [datatypes-collections#27]:
