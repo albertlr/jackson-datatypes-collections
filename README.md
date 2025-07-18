@@ -28,7 +28,7 @@ To use these format backends Maven-based projects, use following dependency:
 <dependency>
   <groupId>com.fasterxml.jackson.datatype</groupId>
   <artifactId>jackson-datatype-[COLLECTION]</artifactId>
-  <version>2.19.1</version>
+  <version>3.0.0-rc5</version>
 </dependency>
 ```
 
@@ -46,29 +46,20 @@ that depends on them).
 ### Registration with ObjectMapper
 
 Like all standard Jackson modules (libraries that implement Module interface), registration for Collections
-datatypes is done using one of 2 mechanisms:
+datatypes is done like so:
 
 ```java
-ObjectMapper mapper;
-
-// New; 2.10.x / 3.0:
-mapper = JsonMapper.builder() // or mapper for other formats
+ObjectMapper mapper = JsonMapper.builder() // or mapper for other formats
     .addModule(new GuavaModule())
     .addModule(new HppcModule())
     .addModule(new PCollectionsModule())
     .build();
-
-// Old (2.x), not available on 3.x:
-mapper = new ObjectMapper() // or mapper for other formats
-    .registerModule(new GuavaModule())
-    .registerModule(new HppcModule())
-    .registerModule(new PCollectionsModule())
-    .registerModule(new EclipseCollectionsModule())
-    ;
 ```
 
 after which datatype read/write support is available for all normal Jackson operations,
 including support for nested types.
+
+NOTE: Jackson 2.x had an alternative, older mechanism for directly registering module on ObjectMapper: 3.x no longer supports this mechanism.
 
 ## Usage, per-datatype
 
