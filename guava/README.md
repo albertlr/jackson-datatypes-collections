@@ -28,7 +28,7 @@ Following table shows the tested working ranges for recent module versions.
 
 | Module version | Min Guava | Default Guava | Max Guava |
 | -------------- | --------- | ------------- | --------- |
-| 3.0            | 25.1-jre  | 25.1-jre      | 33.1.0-jre|
+| 3.0            | 25.1-jre  | 33.3.1-jre    | 33.4.8-jre|
 | 2.20           | 22.0      | 25.1-jre      | 33.4.8-jre|
 | 2.19           | 20.0      | 25.1-jre      | 33.1.0-jre|
 | 2.18           | 20.0      | 25.1-jre      | 33.1.0-jre|
