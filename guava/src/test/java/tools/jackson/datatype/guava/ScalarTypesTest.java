@@ -24,8 +24,7 @@ public class ScalarTypesTest extends ModuleTestBase
     public void testInternetDomainNameDeserialization() throws Exception
     {
         final String INPUT = "google.com";
-//        InternetDomainName name = MAPPER.readValue(quote(INPUT), InternetDomainName.class);
-        InternetDomainName name = new ObjectMapper().readValue(q(INPUT), InternetDomainName.class);
+        InternetDomainName name = MAPPER.readValue(q(INPUT), InternetDomainName.class);
         assertNotNull(name);
         assertEquals(INPUT, name.toString());
     }
