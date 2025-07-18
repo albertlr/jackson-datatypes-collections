@@ -12,7 +12,7 @@ To use module on Maven-based projects, use following dependency:
 <dependency>
   <groupId>com.fasterxml.jackson.datatype</groupId>
   <artifactId>jackson-datatype-guava</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.0-rc5</version>
 </dependency>
 ```
 
@@ -29,6 +29,8 @@ Following table shows the tested working ranges for recent module versions.
 | Module version | Min Guava | Default Guava | Max Guava |
 | -------------- | --------- | ------------- | --------- |
 | 3.0            | 25.1-jre  | 25.1-jre      | 33.1.0-jre|
+| 2.20           | 22.0      | 25.1-jre      | 33.4.8-jre|
+| 2.19           | 20.0      | 25.1-jre      | 33.1.0-jre|
 | 2.18           | 20.0      | 25.1-jre      | 33.1.0-jre|
 | 2.17           | 20.0      | 25.1-jre      | 33.1.0-jre|
 | 2.16           | 20.0      | 25.1-jre      | 33.1.0-jre|
@@ -42,7 +44,7 @@ Following table shows the tested working ranges for recent module versions.
 
 Notes:
 
-* At the point of testing, `31.1-jre` was the latest available Guava library
+* At the point of testing of 2.14 - 2.19,, `31.1-jre` was the latest available Guava library
 version, so all versions work with the latest Guava
 * "Min Guava" means the earliest version that integration tests pass with
 * "Default Guava" is the dependency specified in module's `pom.xml`: it is used for build, unit tests
@@ -50,20 +52,7 @@ version, so all versions work with the latest Guava
 
 ### Registering module
 
-Like all standard Jackson modules (libraries that implement Module interface), registration is done as follows (Jackson 2.x up to 2.9)
-
-```java
-// New (2.10+)
-ObjectMapper mapper = JsonMapper.builder()
-    .addModule(new GuavaModule())
-    .build();
-
-// Old (before 2.10, but works on all 2.x)
-ObjectMapper mapper = new ObjectMapper()
-    .registerModule(new GuavaModule());
-```
-
-OR, the new method added in 2.10 (old method will work with 2.x but not 3.x):
+Like all standard Jackson modules (libraries that implement Module interface), registration is done as follows:
 
 ```java
 ObjectMapper mapper = JsonMapper.builder()
