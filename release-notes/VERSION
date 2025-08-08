@@ -10,6 +10,10 @@ Modules:
 === Releases ===
 ------------------------------------------------------------------------
 
+3.0.0-rc7 (08-Aug-2025)
+
+No changes since rc6
+
 3.0.0-rc6 (18-Jul-2025)
 
 - Remove SPI metadata; fix SPI module test to work with JPMS
