@@ -16,7 +16,11 @@ Active Maintainers:
 === Releases ===
 ------------------------------------------------------------------------
 
-2.20.0-rc1 (04-Aug-2025)
+2.21.0 (not yet released)
+
+No changes since 2.20
+
+2.20.0 (28-Aug-2025)
 
 #190: Add unit tests to verify goodness of SPI metadata for Modules
 - Generate SBOMs [JSTEP-14]
