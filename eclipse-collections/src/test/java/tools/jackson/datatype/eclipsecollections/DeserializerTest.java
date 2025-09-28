@@ -5,9 +5,13 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ObjectMapper;
 import org.eclipse.collections.api.*;
@@ -29,6 +33,9 @@ import org.eclipse.collections.api.map.ImmutableMap;
 import org.eclipse.collections.api.map.MapIterable;
 import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.map.UnsortedMapIterable;
+import org.eclipse.collections.api.map.sorted.ImmutableSortedMap;
+import org.eclipse.collections.api.map.sorted.MutableSortedMap;
+import org.eclipse.collections.api.map.sorted.SortedMapIterable;
 import org.eclipse.collections.api.map.primitive.IntObjectMap;
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.eclipse.collections.api.set.MutableSet;
@@ -42,7 +49,6 @@ import org.eclipse.collections.impl.factory.*;
 import org.eclipse.collections.impl.factory.primitive.*;
 import org.eclipse.collections.impl.tuple.Tuples;
 import org.eclipse.collections.impl.tuple.primitive.PrimitiveTuples;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -585,5 +591,70 @@ public final class DeserializerTest extends ModuleTestBase {
                 triple,
                 mapper.readValue(actJson, new TypeReference<Triplet<String>>() {})
         );
+    }
+
+    @Test
+    public void mutableSortedMap() throws Exception {
+        final ObjectMapper mapper = mapperWithModule();
+        final MutableSortedMap<String, Object> sortedMap = SortedMaps.mutable.of("c", 3, "a", 1, "b", 2);
+        final String json = mapper.writeValueAsString(sortedMap);
+
+        final MutableSortedMap<String, Object> result = mapper.readValue(
+                json,
+                new TypeReference<MutableSortedMap<String, Object>>() {}
+        );
+
+        assertEquals(sortedMap, result);
+        assertTrue(result instanceof MutableSortedMap);
+    }
+
+    @Test
+    public void sortedMapIterable() throws Exception {
+        final ObjectMapper mapper = mapperWithModule();
+        final MutableSortedMap<String, Object> sortedMap = SortedMaps.mutable.of("c", 3, "a", 1, "b", 2);
+        final String json = mapper.writeValueAsString(sortedMap);
+
+        final SortedMapIterable<String, Object> result = mapper.readValue(
+                json,
+                new TypeReference<SortedMapIterable<String, Object>>() {}
+        );
+
+        assertEquals(sortedMap, result);
+        assertTrue(result instanceof SortedMapIterable);
+    }
+
+    @Test
+    public void immutableSortedMap() throws Exception {
+        final ObjectMapper mapper = mapperWithModule();
+        final ImmutableSortedMap<String, Object> sortedMap = SortedMaps.immutable.of("c", 3, "a", 1, "b", 2);
+        final String json = mapper.writeValueAsString(sortedMap);
+
+        final ImmutableSortedMap<String, Object> result = mapper.readValue(
+                json,
+                new TypeReference<ImmutableSortedMap<String, Object>>() {}
+        );
+
+        assertEquals(sortedMap, result);
+        assertTrue(result instanceof ImmutableSortedMap);
+    }
+
+    @Test
+    public void sortedMap_nonComparableKey() throws Exception {
+        final ObjectMapper mapper = mapperWithModule();
+
+        // Currency doesn't implement Comparable
+        assertFalse(Comparable.class.isAssignableFrom(Currency.class));
+
+        final String json = "{\"USD\":1}";
+
+        final DatabindException e = assertThrows(
+                DatabindException.class,
+                () -> mapper.readValue(
+                        json,
+                        new TypeReference<MutableSortedMap<Currency, Object>>() {}
+                )
+        );
+        verifyException(e, "Cannot deserialize `org.eclipse.collections.api.map.sorted.MutableSortedMap<java.util.Currency,java.lang.Object>`");
+        verifyException(e, "key type `java.util.Currency` does not implement `java.lang.Comparable`");
     }
 }
