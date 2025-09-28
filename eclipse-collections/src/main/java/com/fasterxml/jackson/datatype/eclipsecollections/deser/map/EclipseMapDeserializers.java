@@ -3,6 +3,9 @@ package com.fasterxml.jackson.datatype.eclipsecollections.deser.map;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.util.ClassUtil;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +17,9 @@ import org.eclipse.collections.api.map.MapIterable;
 import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.map.MutableMapIterable;
 import org.eclipse.collections.api.map.UnsortedMapIterable;
+import org.eclipse.collections.api.map.sorted.ImmutableSortedMap;
+import org.eclipse.collections.api.map.sorted.MutableSortedMap;
+import org.eclipse.collections.api.map.sorted.SortedMapIterable;
 import org.eclipse.collections.api.map.primitive.ByteBooleanMap;
 import org.eclipse.collections.api.map.primitive.ByteByteMap;
 import org.eclipse.collections.api.map.primitive.ByteCharMap;
@@ -238,7 +244,7 @@ public final class EclipseMapDeserializers {
     private EclipseMapDeserializers() {
     }
 
-    public static EclipseMapDeserializer<?, ?, ?, ?> createDeserializer(JavaType type) {
+    public static EclipseMapDeserializer<?, ?, ?, ?> createDeserializer(JavaType type) throws JsonMappingException {
         Class<?> rawClass = type.getRawClass();
         Entry<?, ?, ?, ?> entry = ENTRIES.get(rawClass);
         if (entry == null) { return null; }
@@ -271,13 +277,28 @@ public final class EclipseMapDeserializers {
             this.finish = finish;
         }
 
-        EclipseMapDeserializer<T, I, K, V> createDeserializer(JavaType type) {
+        EclipseMapDeserializer<T, I, K, V> createDeserializer(JavaType type) throws JsonMappingException {
             Class<?> rawClass = type.getRawClass();
             List<JavaType> typeParameters = type.getBindings().getTypeParameters();
             boolean refValue = PrimitiveObjectMap.class.isAssignableFrom(rawClass) ||
                                MapIterable.class.isAssignableFrom(rawClass);
             boolean refKey = refValue ? (typeParameters.size() == 2) : (typeParameters.size() == 1);
 
+            // Generic key type validation
+            if (typeHandlerPair == TypeHandlerPair.COMPARABLE_OBJECT) {
+                Class<?> expectedKeyClass = Comparable.class;
+                Class<?> actualKeyClass = typeParameters.get(0).getRawClass();
+
+                if (!expectedKeyClass.isAssignableFrom(actualKeyClass)) {
+                    String message = String.format(
+                        "Cannot deserialize %s: key type %s does not implement %s",
+                        ClassUtil.getTypeDescription(type),
+                        ClassUtil.nameOf(actualKeyClass),
+                        ClassUtil.nameOf(expectedKeyClass)
+                    );
+                    throw JsonMappingException.from((JsonParser) null, message);
+                }
+            }
             K keyHandler = typeHandlerPair.keyHandler(refKey ? typeParameters.get(0) : null);
             V valueHandler = typeHandlerPair.valueHandler(refValue ? typeParameters.get(typeParameters.size() - 1) : null);
 
@@ -327,6 +348,11 @@ public final class EclipseMapDeserializers {
         add(UnsortedMapIterable.class, TypeHandlerPair.OBJECT_OBJECT);
         add(ImmutableMap.class, TypeHandlerPair.OBJECT_OBJECT, MutableMap::toImmutable);
         add(ImmutableMapIterable.class, TypeHandlerPair.OBJECT_OBJECT, MutableMap::toImmutable);
+
+        // 26-Sep-2025: [datatypes-collections#198] Sorted maps
+        add(ImmutableSortedMap.class, TypeHandlerPair.COMPARABLE_OBJECT, MutableSortedMap::toImmutable);
+        add(MutableSortedMap.class, TypeHandlerPair.COMPARABLE_OBJECT);
+        add(SortedMapIterable.class, TypeHandlerPair.COMPARABLE_OBJECT);
 
         add(ObjectBooleanMap.class, TypeHandlerPair.OBJECT_BOOLEAN);
         add(MutableObjectBooleanMap.class, TypeHandlerPair.OBJECT_BOOLEAN);
