@@ -14,6 +14,8 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.datatype.eclipsecollections.testutil.failure.JacksonTestFailureExpected;
+
 import org.eclipse.collections.api.*;
 import org.eclipse.collections.api.bag.Bag;
 import org.eclipse.collections.api.bag.ImmutableBag;
@@ -593,6 +595,10 @@ public final class DeserializerTest extends ModuleTestBase {
         );
     }
 
+    // // // Tests for SortedMap types (see [datatypes-collections#198])
+
+    // See datatypes-collections#198 wrt Jackson 3.0:
+    @JacksonTestFailureExpected
     @Test
     public void mutableSortedMap() throws Exception {
         final ObjectMapper mapper = mapperWithModule();
@@ -608,6 +614,8 @@ public final class DeserializerTest extends ModuleTestBase {
         assertTrue(result instanceof MutableSortedMap);
     }
 
+    // See datatypes-collections#198 wrt Jackson 3.0:
+    @JacksonTestFailureExpected
     @Test
     public void sortedMapIterable() throws Exception {
         final ObjectMapper mapper = mapperWithModule();
@@ -623,6 +631,8 @@ public final class DeserializerTest extends ModuleTestBase {
         assertTrue(result instanceof SortedMapIterable);
     }
 
+    // See datatypes-collections#198 wrt Jackson 3.0:
+    @JacksonTestFailureExpected
     @Test
     public void immutableSortedMap() throws Exception {
         final ObjectMapper mapper = mapperWithModule();
@@ -638,6 +648,8 @@ public final class DeserializerTest extends ModuleTestBase {
         assertTrue(result instanceof ImmutableSortedMap);
     }
 
+    // See datatypes-collections#198 wrt Jackson 3.0:
+    @JacksonTestFailureExpected
     @Test
     public void sortedMap_nonComparableKey() throws Exception {
         final ObjectMapper mapper = mapperWithModule();
