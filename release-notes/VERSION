@@ -10,31 +10,7 @@ Modules:
 === Releases ===
 ------------------------------------------------------------------------
 
-3.0.0-rc10 (19-Sep-2025)
-3.0.0-rc9 (05-Sep-2025)
-3.0.0-rc8 (13-Aug-2025)
-3.0.0-rc7 (08-Aug-2025)
-
-No changes since rc6
-
-3.0.0-rc6 (18-Jul-2025)
-
-- Remove SPI metadata; fix SPI module test to work with JPMS
-
-3.0.0-rc5 (22-May-2025)
-3.0.0-rc4 (10-May-2025)
-
-No changes since rc3
-
-3.0.0-rc3 (13-Apr-2025)
-
-- Branch rename "master" -> "3.x" [JSTEP-12]
-
-3.0.0-rc2 (28-Mar-2025)
-
-No changes since rc1.
-
-3.0.0-rc1 (07-Mar-2025)
+3.0.0 (03-Oct-2025)
 
 #24: Support for Guava's Immutable{Double,Int,Long}Array
  (contributed by László-Róbert A)
@@ -45,3 +21,5 @@ No changes since rc1.
 - (guava) Update "preferred" Guava version to 33.4.0-jre
 - (hppc) Update `hppc` dependency to 0.10.0 (JDK 11+)
 - Minimum Java baseline: Java 17
+- Remove SPI metadata; fix SPI module test to work with JPMS
+- Branch rename "master" -> "3.x" [JSTEP-12]
