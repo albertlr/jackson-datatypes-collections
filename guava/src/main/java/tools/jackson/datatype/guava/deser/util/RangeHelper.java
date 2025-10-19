@@ -1,11 +1,16 @@
 package tools.jackson.datatype.guava.deser.util;
 
 import java.lang.reflect.Field;
+import java.util.regex.Pattern;
 
-import tools.jackson.databind.PropertyNamingStrategy;
+import com.google.common.collect.BoundType;
+import com.google.common.collect.Range;
+
+import tools.jackson.databind.*;
 import tools.jackson.databind.cfg.MapperConfig;
 import tools.jackson.databind.introspect.AnnotatedField;
 import tools.jackson.databind.introspect.TypeResolutionContext;
+import tools.jackson.databind.util.ClassUtil;
 
 public class RangeHelper
 {
@@ -51,6 +56,8 @@ public class RangeHelper
 
     private final static Field[] FIELDS = STD_NAMES.fields();
 
+    private final static Pattern PATTERN_DOUBLE_DOT = Pattern.compile("\\.\\.");
+
     public static RangeProperties standardNames() {
         return STD_NAMES;
     }
@@ -72,5 +79,70 @@ public class RangeHelper
             PropertyNamingStrategy pns, Field field) {
         AnnotatedField af = new AnnotatedField(typeCtxt, field, null);
         return pns.nameForField(config, af, field.getName());
+    }
+
+    public static Range<? extends Comparable> getRangeFromString(String rangeInterval,
+            DeserializationContext context, KeyDeserializer fromStringDeserializer,
+            JavaType rangeType, Class<?> targetClass)
+    {
+        if (_isValidBracketNotation(rangeInterval)) {
+            BoundType lowerBoundType = rangeInterval.startsWith("[") ? BoundType.CLOSED : BoundType.OPEN;
+            BoundType upperBoundType = rangeInterval.endsWith("]") ? BoundType.CLOSED : BoundType.OPEN;
+
+            rangeInterval = rangeInterval.substring(1, rangeInterval.length() - 1);
+            String[] parts = PATTERN_DOUBLE_DOT.split(rangeInterval);
+
+            if (parts.length == 2) {
+                boolean isLowerInfinite = parts[0].equals("-∞");
+                boolean isUpperInfinite = parts[1].equals("+∞");
+
+                if (isLowerInfinite && isUpperInfinite) {
+                    return RangeFactory.all();
+                } else if (isLowerInfinite) {
+                    return RangeFactory.upTo(deserializeStringified(context, parts[1], fromStringDeserializer, rangeType), upperBoundType);
+                } else if (isUpperInfinite) {
+                    return RangeFactory.downTo(deserializeStringified(context, parts[0], fromStringDeserializer, rangeType), lowerBoundType);
+                } else {
+                    return RangeFactory.range(deserializeStringified(context, parts[0], fromStringDeserializer, rangeType),
+                            lowerBoundType,
+                            deserializeStringified(context, parts[1], fromStringDeserializer, rangeType),
+                            upperBoundType);
+                }
+            }
+        } else {
+            String msg = "Invalid Range: should start with '[' or '(', end with ')' or ']'";
+            return (Range<?>) context.handleWeirdStringValue(targetClass, rangeInterval, msg);
+        }
+
+        // Give generic failure if no specific reason can be given.
+        // Although most likely will happen because `..` is absent, since we are validating brackets above.
+        return (Range<?>) context.handleWeirdStringValue(targetClass, rangeInterval,
+                "Invalid bracket-notation representation (possibly missing \"..\" delimiter in your Stringified Range)");
+    }
+
+    private static Comparable<?> deserializeStringified(DeserializationContext context,
+            String value, KeyDeserializer fromStringDeserializer, JavaType rangeType)
+    {
+        Object obj = fromStringDeserializer.deserializeKey(value, context);
+        if (!(obj instanceof Comparable)) {
+            // 02-Jan-2024, tatu: Not sure this is possible but let's double-check
+            context.reportBadDefinition(rangeType,
+                    String.format(
+                            "Stringified endpoint '%s' deserialized to a %s, which does not implement `Comparable`",
+                            value,
+                            ClassUtil.classNameOf(obj)));
+        }
+        return (Comparable<?>) obj;
+    }
+
+
+    private static boolean _isValidBracketNotation(String range) {
+        if (range.isEmpty()) {
+            return false;
+        }
+        char first = range.charAt(0);
+        char last = range.charAt(range.length() - 1);
+
+        return (first == '[' || first == '(') && (last == ']' || last == ')');
     }
 }

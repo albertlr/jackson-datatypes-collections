@@ -1,11 +1,11 @@
 package tools.jackson.datatype.guava;
 
+import com.google.common.collect.BoundType;
+
 import tools.jackson.core.Version;
 
 import tools.jackson.databind.JacksonModule;
 import tools.jackson.datatype.guava.ser.GuavaBeanSerializerModifier;
-
-import com.google.common.collect.BoundType;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -56,6 +56,7 @@ public class GuavaModule extends JacksonModule // can't use just SimpleModule, d
     public void setupModule(SetupContext context)
     {
         context.addDeserializers(new GuavaDeserializers(_defaultBoundType));
+        context.addKeyDeserializers(new GuavaKeyDeserializers());
         context.addSerializers(new GuavaSerializers());
         context.addTypeModifier(new GuavaTypeModifier());
 
