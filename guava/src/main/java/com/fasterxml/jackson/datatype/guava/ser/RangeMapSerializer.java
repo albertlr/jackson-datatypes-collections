@@ -68,9 +68,6 @@ public class RangeMapSerializer
      */
     protected final boolean _sortKeys;
 
-    /**
-     * @since 2.21
-     */
     public RangeMapSerializer(MapLikeType type, BeanDescription beanDesc,
                               JsonSerializer<Object> keySerializer, TypeSerializer vts, JsonSerializer<Object> valueSerializer,
                               Set<String> ignoredEntries, Object filterId) {
@@ -87,9 +84,6 @@ public class RangeMapSerializer
         _dynamicValueSerializers = PropertySerializerMap.emptyForProperties();
     }
 
-    /**
-     * @since 2.5
-     */
     @SuppressWarnings("unchecked")
     protected RangeMapSerializer(RangeMapSerializer src, BeanProperty property,
                                  JsonSerializer<?> keySerializer,

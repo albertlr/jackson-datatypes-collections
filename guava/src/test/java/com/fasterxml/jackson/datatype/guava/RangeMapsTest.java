@@ -15,8 +15,6 @@ import com.google.common.collect.RangeMap;
 import com.google.common.collect.TreeRangeMap;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -128,13 +126,13 @@ public class RangeMapsTest extends ModuleTestBase {
     }
 
     @Test
-    public void testRangeMapWithIgnores() throws IOException {
+    public void testRangeMapWithIgnores() throws Exception {
         assertEquals("{\"map\":{\"(0..10]\":\"A\",\"(10..20]\":\"B\",\"(40..50]\":\"E\"}}",
                 MAPPER.writeValueAsString(new RangeMapWithIgnores()));
     }
 
     @Test
-    public void testRangeMapWithFilters() throws IOException {
+    public void testRangeMapWithFilters() throws Exception {
         FilterProvider filters = new SimpleFilterProvider() .addFilter(
                 "myFilter", SimpleBeanPropertyFilter.filterOutAllExcept("(10..20]", "(40..50]"));
 
