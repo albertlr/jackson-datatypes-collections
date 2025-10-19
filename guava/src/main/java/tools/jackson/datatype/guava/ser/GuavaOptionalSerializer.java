@@ -9,7 +9,7 @@ import tools.jackson.databind.util.NameTransformer;
 import com.google.common.base.Optional;
 
 public class GuavaOptionalSerializer
-    extends ReferenceTypeSerializer<Optional<?>> // since 2.9
+    extends ReferenceTypeSerializer<Optional<?>>
 {
     /*
     /**********************************************************

@@ -9,8 +9,6 @@ import com.google.common.base.Optional;
 
 public class GuavaOptionalBeanPropertyWriter extends BeanPropertyWriter
 {
-    private static final long serialVersionUID = 1;
-
     protected GuavaOptionalBeanPropertyWriter(BeanPropertyWriter base) {
         super(base);
     }

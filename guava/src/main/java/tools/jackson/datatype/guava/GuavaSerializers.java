@@ -1,9 +1,9 @@
 package tools.jackson.datatype.guava;
 
-import tools.jackson.databind.type.CollectionLikeType;
-
 import java.io.Serializable;
 import java.util.Set;
+
+import com.google.common.collect.RangeMap;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,6 +12,7 @@ import tools.jackson.databind.introspect.Annotated;
 import tools.jackson.databind.jsontype.TypeSerializer;
 import tools.jackson.databind.ser.Serializers;
 import tools.jackson.databind.ser.std.ToStringSerializer;
+import tools.jackson.databind.type.CollectionLikeType;
 import tools.jackson.databind.type.MapLikeType;
 import tools.jackson.databind.type.ReferenceType;
 import tools.jackson.databind.ser.std.StdDelegatingSerializer;
@@ -19,6 +20,7 @@ import tools.jackson.databind.util.StdConverter;
 import tools.jackson.datatype.guava.ser.CacheSerializer;
 import tools.jackson.datatype.guava.ser.GuavaOptionalSerializer;
 import tools.jackson.datatype.guava.ser.MultimapSerializer;
+import tools.jackson.datatype.guava.ser.RangeMapSerializer;
 import tools.jackson.datatype.guava.ser.RangeSerializer;
 import tools.jackson.datatype.guava.ser.RangeSetSerializer;
 import tools.jackson.datatype.guava.ser.TableSerializer;
@@ -106,11 +108,20 @@ public class GuavaSerializers extends Serializers.Base
     {
         if (type.isTypeOrSubTypeOf(Multimap.class)) {
             final AnnotationIntrospector intr = config.getAnnotationIntrospector();
-            Object filterId = intr.findFilterId(config, (Annotated)beanDescRef.getClassInfo());
+            Object filterId = intr.findFilterId(config, beanDescRef.getClassInfo());
             JsonIgnoreProperties.Value ignorals = config.getDefaultPropertyIgnorals(Multimap.class,
                     beanDescRef.getClassInfo());
             Set<String> ignored = (ignorals == null) ? null : ignorals.getIgnored();
             return new MultimapSerializer(type, beanDescRef,
+                    keySerializer, elementTypeSerializer, elementValueSerializer, ignored, filterId);
+        }
+        if (type.isTypeOrSubTypeOf(RangeMap.class)) {
+            final AnnotationIntrospector intr = config.getAnnotationIntrospector();
+            Object filterId = intr.findFilterId(config, beanDescRef.getClassInfo());
+            JsonIgnoreProperties.Value ignorals = config.getDefaultPropertyIgnorals(RangeMap.class,
+                    beanDescRef.getClassInfo());
+            Set<String> ignored = (ignorals == null) ? null : ignorals.getIgnored();
+            return new RangeMapSerializer(type, beanDescRef,
                     keySerializer, elementTypeSerializer, elementValueSerializer, ignored, filterId);
         }
         if (type.isTypeOrSubTypeOf(Cache.class)) {
