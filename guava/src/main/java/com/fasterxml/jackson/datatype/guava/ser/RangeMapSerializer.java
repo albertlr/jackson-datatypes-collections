@@ -251,7 +251,7 @@ public class RangeMapSerializer
     }
 
     private void serializeValue(RangeMap<Comparable<?>, ?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        if (!isEmpty(value)) {
+        if (!isEmpty(provider, value)) {
             if (_sortKeys || provider.isEnabled(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)) {
                 value = _orderEntriesByKey(value, gen, provider);
             }
