@@ -10,6 +10,10 @@ Modules:
 === Releases ===
 ------------------------------------------------------------------------
 
+3.0.1 (21-Oct-2025)
+
+No changes since 3.0.0
+
 3.0.0 (03-Oct-2025)
 
 #24: Support for Guava's Immutable{Double,Int,Long}Array
